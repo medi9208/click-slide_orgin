@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click&Slide</title>
+    <style>
+        body {
+            background-color: black;
+            margin: none;
+        }
+
+        div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #buttons {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        button {
+            height: 30px;
+            width: 60px;
+            margin-left: 10px;
+
+        }
+
+        #slider {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #main {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        #picture {
+            width: 401px;
+            height: 401px;
+        }
+
+        #czas {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .owerlay {
+            position: fixed;
+            /* Sit on top of the page content */
+            display: none;
+            /* Hidden by default */
+            width: 100%;
+            /* Full width (cover the whole page) */
+            height: 100%;
+            /* Full height (cover the whole page) */
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Black background with opacity */
+            z-index: 2;
+            /* Specify a stack order in case you're using a different order for other elements */
+            cursor: pointer;
+            /* Add a pointer on hover */
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="content">
+        <div id="slider"><img src="pictures/picture01.png" height="150px" width="150px"></div>
+        <div id="buttons"></div>
+        <div id="czas"></div>
+        <div id="main">
+            <div id="picture">
+            </div>
+        </div>
+    </div>
+    <script>
+        var button = [3, 4, 5, 6]
+        for (let a = button[0]; a < button[0] + button.length; a++) {
+            let button = document.createElement("button")
+            button.addEventListener("click", function () {
+                clearInterval(zmienianko)
+                zdjecie.licznik()
+                var usuwanie = document.getElementById("picture")
+                usuwanie.innerHTML = ""
+                var ramka = document.getElementById("picture")
+                ramka.style.border = "1px solid red"
+                zdjecie.rozcinanie(a)
+
+
+            })
+            button.innerText = a + " x " + a
+            let addbutton = document.querySelector("#buttons")
+            addbutton.appendChild(button)
+        }
+        let przesunecietop = 0
+        let przesunecieleft = 0
+        let czaszaczecia = 0
+        let czasskonczenia = 0
+        let zmienianko = 0
+        let aktualnycza = 0
+        let zdjecie = {
+            widhei: 400,
+            a: (button.lenght - 1),
+            src: "pictures/picture01.png",
+            mieszanie: function (a) {
+                let kierunek = Math.floor(Math.random() * 2)
+                if (kierunek == 0) {
+
+                } if (kierunek == 1) {
+
+                }
+            },
+            rozcinanie: function (a) {
+                for (let x = 0; x < a; x++) {
+                    for (let y = 0; y < a; y++) {
+                        let kawalek = document.createElement("div")
+                        let addkawalek = document.getElementById("picture")
+                        kawalek.style.width = (zdjecie.widhei / a) + "px"
+                        kawalek.style.height = (zdjecie.widhei / a) + "px"
+                        kawalek.style.position = "absolute"
+                        if (x == a - 1 && y == a - 1) {
+                            kawalek.style.backgroundColor = "black"
+
+                        } else {
+                            kawalek.style.backgroundImage = "url(" + zdjecie.src + ")"
+                            kawalek.style.backgroundSize = zdjecie.widhei + "px"
+                            kawalek.style.backgroundPosition = -y * (zdjecie.widhei / a) + "px " + -x * (zdjecie.widhei / a) + "px"
+                        }
+                        kawalek.className = x + "x" + y
+                        przesunecietop = (addkawalek.offsetTop + 1)
+                        przesunecieleft = (addkawalek.offsetLeft + 1)
+                        kawalek.style.top = przesunecietop + (x * (zdjecie.widhei / a)) + "px"
+                        kawalek.style.left = przesunecieleft + (y * (zdjecie.widhei / a)) + "px"
+                        kawalek.id = "x" + x + " y" + y
+                        //klikanie w kawałki obrazka i zmiana miejsca 
+                        kawalek.addEventListener("click", function () {
+                            let aktualnyxy = this.className.split("x")
+                            let przejsciowexy = ""
+                            let czarny = document.getElementById("x" + (a - 1) + " y" + (a - 1))
+                            let czarnyxy = czarny.className.split("x")
+                            if (aktualnyxy[0] == (czarnyxy[0] - 1) && aktualnyxy[1] == czarnyxy[1] || aktualnyxy[0] - 1 == (czarnyxy[0]) && aktualnyxy[1] == czarnyxy[1] || aktualnyxy[0] == czarnyxy[0] && aktualnyxy[1] - 1 == (czarnyxy[1]) || aktualnyxy[0] == czarnyxy[0] && aktualnyxy[1] == (czarnyxy[1] - 1)) {
+                                przejsciowexy = czarnyxy
+                                czarny.className = this.className
+                                this.className = przejsciowexy[0] + "x" + przejsciowexy[1]
+                                this.style.left = przesunecieleft + (zdjecie.widhei / a) * przejsciowexy[1] + "px"
+                                this.style.top = przesunecietop + (zdjecie.widhei / a) * przejsciowexy[0] + "px"
+                                czarnexy = czarny.className.split("x")
+                                czarny.style.left = przesunecieleft + (zdjecie.widhei / a) * czarnexy[1] + "px"
+                                czarny.style.top = przesunecietop + (zdjecie.widhei / a) * czarnexy[0] + "px"
+                                let sprawdzona = (a) * (a)
+                                for (let d = 0; d < a; d++) {
+                                    for (let e = 0; e < a; e++) {
+                                        let sprawdz = document.getElementById("x" + d + " y" + e)
+                                        if (sprawdz.className == (d + "x" + e)) {
+                                            sprawdzona -= 1
+                                        } if (sprawdzona == 0) {
+                                            // var czasskonczenia = new Date().getTime()
+                                            // var rekord = (czasskonczenia - czaszaczecia)
+                                            var rekord = aktualnyczas
+                                            let hour = Math.floor(rekord / 36000000)
+                                            let min = Math.floor((rekord - (36000000 * hour)) / 600000)
+                                            var sec = Math.floor((rekord - (600000 * min) + (36000000 * hour)) / 1000)
+                                            var reszta = Math.floor((rekord - ((600000 * min) + (1000 * sec) + (36000000 * hour))) / 1)
+                                            let zerohour = 0
+                                            if (hour < 10) {
+                                                zerohour = "0" + hour
+                                            } else {
+                                                zerohour = hour
+                                            }
+                                            let zeromin = 0
+                                            if (min < 10) {
+                                                zeromin = "0" + min
+                                            } else {
+                                                zeromin = min
+                                            }
+                                            let zerosec = 0
+                                            if (sec < 10) {
+                                                zerosec = "0" + sec
+                                            } else {
+                                                zerosec = sec
+                                            }
+                                            let zeroreszta = 0
+                                            let XD = ""
+                                            if (reszta < 100 && reszta > 9) {
+                                                zeroreszta = reszta
+                                                XD = "0"
+                                            } if (reszta < 10) {
+                                                zeroreszta = reszta
+                                                XD = "00"
+                                            } else {
+                                                zeroreszta = reszta
+                                            }
+                                            clearInterval(zmienianko)
+                                            setTimeout(function () {
+                                                // window.alert("Gratulacje! Wygrałeś! Twój czas to:  " + zerohour + ":" + zeromin + ":" + zerosec + "." + XD + zeroreszta)
+                                                let mynick = "mydick"
+                                                let indexplanszy = a - 3
+                                                document.cookie = indexplanszy + "|10" + "=" + "mynick" + "|" + zerohour + ":" + zeromin + ":" + zerosec + "." + XD + zeroreszta + "|" + rekord
+                                                zdjecie.tabliceplansz()
+                                                zdjecie.owerlej()
+                                            }, 50)
+                                        }
+                                    }
+                                }
+                            }
+
+                        })
+                        addkawalek.appendChild(kawalek)
+                    }
+                } zdjecie.losowanie(a)
+            },
+            owerlej: function () {
+                let cssowerlay = document.createElement("div")
+                cssowerlay.classList = "owerlay"
+                cssowerlay.style.display = "block"
+                let owerlaywyświetlanie = document.createElement("div")
+                owerlaywyświetlanie.style.backgroundColor = "rgb(220,220,220,1)"
+                owerlaywyświetlanie.style.position = "absolute"
+                owerlaywyświetlanie.style.top = "35%"
+                owerlaywyświetlanie.style.left = "37%"
+                owerlaywyświetlanie.style.bottom = "35%"
+                owerlaywyświetlanie.style.right = "37%"
+                owerlaywyświetlanie.style.zindex = "3"
+                owerlaywyświetlanie.style.border = "3px solid white"
+                owerlaywyświetlanie.style.borderRadius = "1%"
+                owerlaywyświetlanie.innerHTML = "Wygrałeś!"
+                owerlaywyświetlanie.style.color = "white"
+                let bodyowerlay = document.querySelector("body")
+                bodyowerlay.appendChild(cssowerlay)
+                bodyowerlay.appendChild(owerlaywyświetlanie)
+            },
+            wyniki: [],
+            tabliceplansz: function () {
+                zdjecie.wyniki = []
+                for (let c = 0; c < button.length; c++) {
+                    zdjecie.wyniki.push([])
+                }
+                zdjecie.cookies()
+            },
+            cookies: function () {
+                if (document.cookie != "") {
+                    for (let c = 0; c < document.cookie.split("; ").length; c++) {
+                        let plansza = document.cookie.split("; ")[c].split("=")[0].split("|")[0]
+                        let miejsce = document.cookie.split("; ")[c].split("=")[0].split("|")[1]
+                        let nick = document.cookie.split("; ")[c].split("=")[1].split("|")[0]
+                        let czas = document.cookie.split("; ")[c].split("=")[1].split("|")[1]
+                        let rekord = document.cookie.split("; ")[c].split("=")[1].split("|")[2]
+                        zdjecie.wyniki[plansza].push({ tablica: plansza, miejsce: 0, nicki: nick, czas: czas, czasmilisec: rekord })
+                        console.log(zdjecie.wyniki)
+                    }
+                }
+                zdjecie.sortwyniki()
+            },
+            sortwyniki: function () {
+                for (let c = 0; c < button.length; c++) {
+                    document.cookie = c + "|10" + "=; max-age=-1;"
+                    zdjecie.wyniki[c].sort(function (a, b) {
+                        return parseFloat(a.czasmilisec) - parseFloat(b.czasmilisec);
+                    })
+                } zdjecie.wyrzucaniewyniki()
+            },
+            wyrzucaniewyniki: function () {
+                for (let c = 0; c < button.length; c++) {
+                    if (zdjecie.wyniki[c].length > 10) {
+                        zdjecie.wyniki[c].pop()
+                    }
+                }
+                // console.log(zdjecie.wyniki)
+                zdjecie.cookiepush()
+            },
+            cookiepush: function () {
+                for (var d = 0; d < 4; d++) {
+                    for (let c = 0; c < zdjecie.wyniki[d].length; c++) {
+                        document.cookie = zdjecie.wyniki[d][c].tablica + "|" + c + "=" + zdjecie.wyniki[d][c].nicki + "|" + zdjecie.wyniki[d][c].czas + "|" + zdjecie.wyniki[d][c].czasmilisec
+                    }
+                }
+                console.log(document.cookie)
+            },
+            losowanie: function (a) {
+
+                let i = 0
+                let kuc = setInterval(function () { }, 10)
+                clearInterval(kuc)
+                kuc = setInterval(function () {
+                    i += 1
+                    let pozycja = 0
+                    let czarny = document.getElementById("x" + (a - 1) + " y" + (a - 1))
+                    let czarnyxy = czarny.className.split("x")
+                    let przejsciowexy = ""
+                    miejsce()
+                    function miejsce() {
+                        pozycja = Math.floor(Math.random() * (4))
+                    }
+                    if (pozycja == 0) {
+                        let czarnyxy = czarny.className.split("x")
+                        if (czarnyxy[0] == 0) {
+                            miejsce()
+                        } else {
+                            let przesuwany = document.getElementsByClassName(parseInt((czarnyxy[0]) - 1) + "x" + (czarnyxy[1]))[0]
+                            przesuwany.className = (czarnyxy[0]) + "x" + (czarnyxy[1])
+                            przesuwany.style.left = przesunecieleft + (zdjecie.widhei / a) * czarnyxy[1] + "px"
+                            przesuwany.style.top = przesunecietop + (zdjecie.widhei / a) * czarnyxy[0] + "px"
+                            czarny.className = (parseInt(czarnyxy[0]) - 1) + "x" + czarnyxy[1]
+                            czarnyxy = czarny.className.split("x")
+                            czarny.style.left = przesunecieleft + (zdjecie.widhei / a) * czarnyxy[1] + "px"
+                            czarny.style.top = przesunecietop + (zdjecie.widhei / a) * parseInt(czarnyxy[0]) - 1 + "px"
+                        }
+                    }
+                    if (pozycja == 1) {
+                        if (czarnyxy[1] == (a - 1)) {
+                            miejsce()
+                        } else {
+                            let przesuwany = document.getElementsByClassName((czarnyxy[0]) + "x" + (parseInt(czarnyxy[1]) + 1))[0]
+                            przesuwany.className = (czarnyxy[0]) + "x" + (czarnyxy[1])
+                            przesuwany.style.left = przesunecieleft + (zdjecie.widhei / a) * czarnyxy[1] + "px"
+                            przesuwany.style.top = przesunecietop + (zdjecie.widhei / a) * czarnyxy[0] + "px"
+                            czarny.className = (czarnyxy[0]) + "x" + (parseInt(czarnyxy[1]) + 1)
+                            czarnyxy = czarny.className.split("x")
+                            czarny.style.left = przesunecieleft + (zdjecie.widhei / a) * parseInt(czarnyxy[1]) + 1 + "px"
+                            czarny.style.top = przesunecietop + (zdjecie.widhei / a) * (czarnyxy[0]) + "px"
+                        }
+
+                    }
+                    if (pozycja == 2) {
+                        if (czarnyxy[0] == (a - 1)) {
+                            miejsce()
+                        } else {
+                            let przesuwany = document.getElementsByClassName(parseInt(czarnyxy[0]) + 1 + "x" + (czarnyxy[1]))[0]
+                            przesuwany.className = (czarnyxy[0]) + "x" + (czarnyxy[1])
+                            przesuwany.style.left = przesunecieleft + (zdjecie.widhei / a) * czarnyxy[1] + "px"
+                            przesuwany.style.top = przesunecietop + (zdjecie.widhei / a) * czarnyxy[0] + "px"
+                            czarny.className = (parseInt(czarnyxy[0]) + 1) + "x" + czarnyxy[1]
+                            czarnyxy = czarny.className.split("x")
+                            czarny.style.left = przesunecieleft + (zdjecie.widhei / a) * czarnyxy[1] + "px"
+                            czarny.style.top = przesunecietop + (zdjecie.widhei / a) * parseInt(czarnyxy[0]) + 1 + "px"
+                        }
+                    }
+                    if (pozycja == 3) {
+                        if (czarnyxy[1] == 0) {
+                            miejsce()
+                        } else {
+                            let przesuwany = document.getElementsByClassName((czarnyxy[0]) + "x" + (parseInt(czarnyxy[1]) - 1))[0]
+                            przesuwany.className = (czarnyxy[0]) + "x" + (czarnyxy[1])
+                            przesuwany.style.left = przesunecieleft + (zdjecie.widhei / a) * czarnyxy[1] + "px"
+                            przesuwany.style.top = przesunecietop + (zdjecie.widhei / a) * czarnyxy[0] + "px"
+                            czarny.className = (czarnyxy[0]) + "x" + (parseInt(czarnyxy[1]) - 1)
+                            czarnyxy = czarny.className.split("x")
+                            czarny.style.left = przesunecieleft + (zdjecie.widhei / a) * parseInt(czarnyxy[1]) - 1 + "px"
+                            czarny.style.top = przesunecietop + (zdjecie.widhei / a) * (czarnyxy[0]) + "px"
+                        }
+
+
+                    }
+                    if (i == a ** 1) {
+                        clearInterval(kuc)
+                        zdjecie.odliczanie()
+                        zmienianko = setInterval(zdjecie.tapodspodem, 1)
+                    }
+                }, 100)
+
+            },
+            odliczanie: function () {
+                czaszaczecia = new Date().getTime()
+            },
+            licznik: function () {
+
+                let tabzer = [
+                    [0, 0, "colon"],
+                    [0, 0, "colon"],
+                    [0, 0, "dot"],
+                    [0, 0, 0]
+                ]
+                let zmiennanazwa = document.getElementById("czas")
+                zmiennanazwa.innerHTML = " "
+                for (let r = 0; r < 4; r++) {
+                    for (let c = 0; c < 3; c++) {
+                        let zmiennazdjecia = document.createElement("img")
+                        zmiennazdjecia.src = "numbers/c" + tabzer[r][c] + ".gif"
+                        zmiennazdjecia.style.height = 35 + "px"
+                        zmiennazdjecia.style.width = 26 + "px"
+                        zmiennanazwa.appendChild(zmiennazdjecia)
+                    }
+                }
+            },
+            tapodspodem: function () {
+                let tab = [
+                    [0, 0, "colon"],
+                    [0, 0, "colon"],
+                    [0, 0, "dot"],
+                    [0, 0, 0]
+                ]
+                let zmiennanazwa = document.getElementById("czas")
+                zmiennanazwa.innerHTML = " "
+                aktualnyczas = parseInt((new Date().getTime()) - czaszaczecia)
+                let hour = Math.floor(aktualnyczas / 36000000)
+                let min = Math.floor((aktualnyczas - (36000000 * hour)) / 600000)
+                var sec = Math.floor((aktualnyczas - (600000 * min) + (36000000 * hour)) / 1000)
+                var reszta = Math.floor(aktualnyczas - ((600000 * min) + (1000 * sec) + (36000000 * hour)))
+                let zerohour = 0
+                if (hour < 10) {
+                    zerohour = "0" + hour
+                } else {
+                    zerohour = String(hour)
+                }
+                let zeromin = 0
+                if (min < 10) {
+                    zeromin = "0" + min
+                } else {
+                    zeromin = String(min)
+                }
+                let zerosec = 0
+                if (sec < 10) {
+                    zerosec = "0" + sec
+                } else {
+                    zerosec = String(sec)
+                }
+                let zeroreszta = 0
+
+                if (reszta < 100 && reszta > 9) {
+                    zeroreszta = "0" + reszta
+                } if (reszta < 10) {
+                    zeroreszta = "00" + reszta
+                } if (reszta == 0) {
+                    zeroreszta = "000"
+                } else {
+                    zeroreszta = String(reszta)
+                }
+                for (let r = 0; r < 4; r++) {
+                    if (r == 0) {
+                        for (let c = 0; c < 2; c++) {
+                            tab[r][c] = parseInt(zerohour[c])
+                        }
+                    } if (r == 1) {
+                        for (let c = 0; c < 2; c++) {
+                            tab[r][c] = parseInt(zeromin[c])
+                        }
+                    } if (r == 2) {
+                        for (let c = 0; c < 2; c++) {
+                            tab[r][c] = parseInt(zerosec[c])
+                        }
+                    } if (r == 3) {
+                        for (let c = 0; c < 4; c++) {
+                            if (zeroreszta.length == 1) {
+                                tab[r][2] = parseInt(zeroreszta[0])
+                            } if (zeroreszta.length == 2) {
+                                tab[r][1] = parseInt(zeroreszta[0])
+                                tab[r][2] = parseInt(zeroreszta[1])
+                            } if (zeroreszta.length == 3) {
+                                tab[r][0] = parseInt(zeroreszta[0])
+                                tab[r][1] = parseInt(zeroreszta[1])
+                                tab[r][2] = parseInt(zeroreszta[2])
+                            }
+
+                        }
+                    }
+                }
+
+                for (let r = 0; r < 4; r++) {
+                    for (let c = 0; c < 3; c++) {
+                        let zmiennazdjecia = document.createElement("img")
+                        zmiennazdjecia.src = "numbers/c" + tab[r][c] + ".gif"
+                        zmiennazdjecia.style.height = 35 + "px"
+                        zmiennazdjecia.style.width = 26 + "px"
+                        zmiennanazwa.appendChild(zmiennazdjecia)
+                    }
+                }
+            }
+        }
+        zdjecie.tabliceplansz()
+
+
+    </script>
+</body>
+
+</html>
