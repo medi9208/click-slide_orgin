@@ -9,6 +9,7 @@
         body {
             background-color: black;
             margin: none;
+            font-family: 'Padauk', sans-serif;
         }
 
         div {
@@ -53,25 +54,42 @@
             margin-top: 10px;
         }
 
-        .owerlay {
+        #owerlay {
             position: fixed;
-            /* Sit on top of the page content */
             display: none;
-            /* Hidden by default */
             width: 100%;
-            /* Full width (cover the whole page) */
             height: 100%;
-            /* Full height (cover the whole page) */
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
             background-color: rgba(0, 0, 0, 0.7);
-            /* Black background with opacity */
             z-index: 2;
-            /* Specify a stack order in case you're using a different order for other elements */
-            cursor: pointer;
-            /* Add a pointer on hover */
+        }
+
+        #rekordy {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        #score {
+            height: 60px;
+            width: 150px;
+            background-color: black;
+            border: 3px solid white;
+            border-radius: 8px;
+            color: white;
+            font-size: 27px;
+            font-weight: bold;
+        }
+
+        #score:hover {
+            background-color: rgb(230, 43, 74);
+            transition: background-color .5s;
+            transition: border .5s;
+
         }
     </style>
 
@@ -83,10 +101,11 @@
         <div id="buttons"></div>
         <div id="czas"></div>
         <div id="main">
-            <div id="picture">
-            </div>
+            <div id="picture"></div>
         </div>
+        <div id="rekordy"><button id="score">Ranking</button></div>
     </div>
+
     <script>
         var button = [3, 4, 5, 6]
         for (let a = button[0]; a < button[0] + button.length; a++) {
@@ -106,6 +125,7 @@
             let addbutton = document.querySelector("#buttons")
             addbutton.appendChild(button)
         }
+
         let przesunecietop = 0
         let przesunecieleft = 0
         let czaszaczecia = 0
@@ -113,9 +133,13 @@
         let zmienianko = 0
         let aktualnycza = 0
         let zdjecie = {
+            actualrecord: 0,
+            actualindex: 0,
+            czasczas: 0,
             widhei: 400,
             a: (button.lenght - 1),
             src: "pictures/picture01.png",
+
             mieszanie: function (a) {
                 let kierunek = Math.floor(Math.random() * 2)
                 if (kierunek == 0) {
@@ -207,10 +231,12 @@
                                             clearInterval(zmienianko)
                                             setTimeout(function () {
                                                 // window.alert("Gratulacje! Wygrałeś! Twój czas to:  " + zerohour + ":" + zeromin + ":" + zerosec + "." + XD + zeroreszta)
-                                                let mynick = "mydick"
                                                 let indexplanszy = a - 3
+                                                zdjecie.actualrecord = rekord
+                                                zdjecie.actualindex = indexplanszy
+                                                zdjecie.czasczas = zerohour + ":" + zeromin + ":" + zerosec + "." + XD + zeroreszta
                                                 document.cookie = indexplanszy + "|10" + "=" + "mynick" + "|" + zerohour + ":" + zeromin + ":" + zerosec + "." + XD + zeroreszta + "|" + rekord
-                                                zdjecie.tabliceplansz()
+                                                console.log("pierwsze" + document.cookie)
                                                 zdjecie.owerlej()
                                             }, 50)
                                         }
@@ -225,23 +251,79 @@
             },
             owerlej: function () {
                 let cssowerlay = document.createElement("div")
-                cssowerlay.classList = "owerlay"
+                cssowerlay.id = "owerlay"
                 cssowerlay.style.display = "block"
                 let owerlaywyświetlanie = document.createElement("div")
-                owerlaywyświetlanie.style.backgroundColor = "rgb(100,100,100)"
+                owerlaywyświetlanie.id = "overlay2"
+                owerlaywyświetlanie.style.backgroundColor = "rgb(50,50,50)"
                 owerlaywyświetlanie.style.position = "absolute"
-                owerlaywyświetlanie.style.top = "30%"
-                owerlaywyświetlanie.style.left = "37%"
-                owerlaywyświetlanie.style.bottom = "30%"
-                owerlaywyświetlanie.style.right = "37%"
+                owerlaywyświetlanie.style.top = "32%"
+                owerlaywyświetlanie.style.left = "35%"
+                owerlaywyświetlanie.style.right = "35%"
                 owerlaywyświetlanie.style.zIndex = "3"
                 owerlaywyświetlanie.style.border = "3px solid white"
                 owerlaywyświetlanie.style.borderRadius = "1%"
-                owerlaywyświetlanie.innerHTML = "Wygrałeś!!!!"
                 owerlaywyświetlanie.style.color = "white"
                 let bodyowerlay = document.querySelector("body")
                 bodyowerlay.appendChild(cssowerlay)
                 bodyowerlay.appendChild(owerlaywyświetlanie)
+                zdjecie.owerlaydalej()
+            },
+            owerlaydalej: function () {
+                let owerlaywyświetlanie = document.createElement("div")
+                let owerlaydalej = document.getElementById("overlay2")
+                owerlaywyświetlanie.innerHTML = "Gratulacje! Wygrałeś! <br> Twój czas to : " + zdjecie.czasczas
+                owerlaywyświetlanie.style.width = "100%"
+                owerlaywyświetlanie.style.paddingTop = "15px"
+                owerlaywyświetlanie.style.fontSize = "30px"
+                owerlaywyświetlanie.style.textAlign = "center"
+                owerlaydalej.appendChild(owerlaywyświetlanie)
+                let owerlaypolecenie = document.createElement("div")
+                owerlaypolecenie.innerHTML = "Podaj swój nick:"
+                owerlaypolecenie.style.marginTop = "18px"
+                owerlaypolecenie.style.marginBottom = "18px"
+                owerlaypolecenie.style.width = "100%"
+                owerlaypolecenie.style.textAlign = "center"
+                owerlaydalej.appendChild(owerlaypolecenie)
+                let podanienicku = document.createElement("div")
+                podanienicku.id = "zapisnick"
+                podanienicku.style.width = "100%"
+                podanienicku.style.display = "flex"
+                podanienicku.style.alignItems = "center"
+                podanienicku.style.paddingBottom = "20px"
+                owerlaydalej.appendChild(podanienicku)
+                let inputnick = document.createElement("input")
+                inputnick.id = "inputnick"
+                inputnick.type = "text"
+                inputnick.style.width = "80%"
+                inputnick.style.display = "flex"
+                inputnick.style.maarginBottom = "15px"
+                let inputnickdiv = document.getElementById("zapisnick")
+                inputnickdiv.appendChild(inputnick)
+                let przyciskdiv = document.createElement("div")
+                przyciskdiv.id = "przycisk"
+                przyciskdiv.style.width = "100%"
+                przyciskdiv.style.display = "flex"
+                przyciskdiv.style.alignItems = "center"
+                przyciskdiv.style.paddingBottom = "15px"
+                owerlaydalej.appendChild(przyciskdiv)
+                let przycisk = document.createElement("button")
+                przycisk.addEventListener("click", function () {
+                    document.cookie = zdjecie.actualindex + "|10" + "=" + inputnick.value + "|" + zdjecie.czasczas + "|" + zdjecie.actualrecord
+                    console.log("drugie" + document.cookie)
+                    zdjecie.wusuwaniepierwszego()
+                })
+                let przyciskdivvvvv = document.getElementById("przycisk")
+                przycisk.innerHTML = "OKKE"
+                przyciskdivvvvv.appendChild(przycisk)
+
+            },
+            wusuwaniepierwszego: function () {
+                let usuniecie = document.getElementById("owerlay")
+                usuniecie.remove()
+                let usunieciedwa = document.getElementById("overlay2")
+                usunieciedwa.remove()
+                zdjecie.tabliceplansz()
             },
             wyniki: [],
             tabliceplansz: function () {
@@ -258,9 +340,8 @@
                         let miejsce = document.cookie.split("; ")[c].split("=")[0].split("|")[1]
                         let nick = document.cookie.split("; ")[c].split("=")[1].split("|")[0]
                         let czas = document.cookie.split("; ")[c].split("=")[1].split("|")[1]
-                        let rekord = document.cookie.split("; ")[c].split("=")[1].split("|")[2]
+                        let rekord = document.cookie.split("; ")[c].split("=")[1].split("|")[2].split(";")[0]
                         zdjecie.wyniki[plansza].push({ tablica: plansza, miejsce: 0, nicki: nick, czas: czas, czasmilisec: rekord })
-                        console.log(zdjecie.wyniki)
                     }
                 }
                 zdjecie.sortwyniki()
@@ -279,16 +360,16 @@
                         zdjecie.wyniki[c].pop()
                     }
                 }
-                // console.log(zdjecie.wyniki)
                 zdjecie.cookiepush()
             },
             cookiepush: function () {
                 for (var d = 0; d < 4; d++) {
                     for (let c = 0; c < zdjecie.wyniki[d].length; c++) {
-                        document.cookie = zdjecie.wyniki[d][c].tablica + "|" + c + "=" + zdjecie.wyniki[d][c].nicki + "|" + zdjecie.wyniki[d][c].czas + "|" + zdjecie.wyniki[d][c].czasmilisec
+                        let exp = new Date()
+                        exp.setTime(exp.getTime() + 1000 * 60 * 60 * 24 * 365 * 10)
+                        document.cookie = zdjecie.wyniki[d][c].tablica + "|" + c + "=" + encodeURIComponent(zdjecie.wyniki[d][c].nicki) + "|" + zdjecie.wyniki[d][c].czas + "|" + zdjecie.wyniki[d][c].czasmilisec + ";expires=" + exp.toUTCString()
                     }
                 }
-                console.log(document.cookie)
             },
             losowanie: function (a) {
 
@@ -478,9 +559,44 @@
                         zmiennanazwa.appendChild(zmiennazdjecia)
                     }
                 }
+            },
+            klikranking: function () {
+                let cssowerlay = document.createElement("div")
+                cssowerlay.id = "owerlay"
+                cssowerlay.style.display = "block"
+                let bodyowerlay = document.querySelector("body")
+                bodyowerlay.appendChild(cssowerlay)
+                let owerlaywyświetlanie = document.createElement("div")
+                owerlaywyświetlanie.id = "overlay2"
+                owerlaywyświetlanie.style.backgroundColor = "rgb(50,50,50)"
+                owerlaywyświetlanie.style.position = "absolute"
+                owerlaywyświetlanie.style.top = "32%"
+                owerlaywyświetlanie.style.left = "35%"
+                owerlaywyświetlanie.style.right = "35%"
+                owerlaywyświetlanie.style.zIndex = "3"
+                owerlaywyświetlanie.style.border = "3px solid white"
+                owerlaywyświetlanie.style.borderRadius = "1%"
+                owerlaywyświetlanie.style.color = "white"
+                bodyowerlay.appendChild(owerlaywyświetlanie)
+                let napisdiv = document.createElement("div")
+                napisdiv.innerHTML = "Rankingi"
+                napisdiv.style.width = "100%"
+                napisdiv.style.paddingTop = "15px"
+                napisdiv.style.fontSize = "30px"
+                napisdiv.style.textAlign = "center"
+                napisdiv.style.fontSize = "27px"
+                napisdiv.style.fontWeight = "bold"
+                owerlaywyświetlanie.appendChild(napisdiv)
+                zdjecie.rankingiplansz()
+            },
+            rankingiplansz: function () {
+
             }
         }
-        zdjecie.tabliceplansz()
+        let clickranking = document.getElementById("score")
+        clickranking.addEventListener("click", function () {
+            zdjecie.klikranking()
+        })
 
 
     </script>
