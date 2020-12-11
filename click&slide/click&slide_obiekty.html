@@ -91,6 +91,10 @@
             transition: border .5s;
 
         }
+
+        .button {
+            cursor: pointer;
+        }
     </style>
 
 </head>
@@ -110,6 +114,15 @@
         var button = [3, 4, 5, 6]
         for (let a = button[0]; a < button[0] + button.length; a++) {
             let button = document.createElement("button")
+            button.classList = "button"
+            button.style.margin = "5px"
+            button.style.width = "70px"
+            button.style.height = "36px"
+            button.style.backgroundColor = "black"
+            button.style.border = "3px solid white"
+            button.style.borderRadius = "8px"
+            button.style.color = "white"
+            button.style.fontSize = "20px"
             button.addEventListener("click", function () {
                 clearInterval(zmienianko)
                 zdjecie.licznik()
@@ -308,6 +321,7 @@
                 przyciskdiv.style.paddingBottom = "15px"
                 owerlaydalej.appendChild(przyciskdiv)
                 let przycisk = document.createElement("button")
+                przycisk.classList = "button"
                 przycisk.addEventListener("click", function () {
                     document.cookie = zdjecie.actualindex + "|10" + "=" + inputnick.value + "|" + zdjecie.czasczas + "|" + zdjecie.actualrecord
                     console.log("drugie" + document.cookie)
@@ -315,6 +329,15 @@
                 })
                 let przyciskdivvvvv = document.getElementById("przycisk")
                 przycisk.innerHTML = "OKKE"
+                przycisk.classList = "button"
+                przycisk.style.margin = "5px"
+                przycisk.style.width = "70px"
+                przycisk.style.height = "36px"
+                przycisk.style.backgroundColor = "black"
+                przycisk.style.border = "3px solid white"
+                przycisk.style.borderRadius = "8px"
+                przycisk.style.color = "white"
+                przycisk.style.fontSize = "20px"
                 przyciskdivvvvv.appendChild(przycisk)
 
             },
@@ -570,26 +593,95 @@
                 owerlaywyświetlanie.id = "overlay2"
                 owerlaywyświetlanie.style.backgroundColor = "rgb(50,50,50)"
                 owerlaywyświetlanie.style.position = "absolute"
-                owerlaywyświetlanie.style.top = "32%"
-                owerlaywyświetlanie.style.left = "35%"
-                owerlaywyświetlanie.style.right = "35%"
+                owerlaywyświetlanie.style.top = "15%"
+                owerlaywyświetlanie.style.left = "30%"
+                owerlaywyświetlanie.style.right = "30%"
                 owerlaywyświetlanie.style.zIndex = "3"
                 owerlaywyświetlanie.style.border = "3px solid white"
-                owerlaywyświetlanie.style.borderRadius = "1%"
+                owerlaywyświetlanie.style.borderRadius = "4px"
                 owerlaywyświetlanie.style.color = "white"
                 bodyowerlay.appendChild(owerlaywyświetlanie)
                 let napisdiv = document.createElement("div")
                 napisdiv.innerHTML = "Rankingi"
-                napisdiv.style.width = "100%"
-                napisdiv.style.paddingTop = "15px"
-                napisdiv.style.fontSize = "30px"
                 napisdiv.style.textAlign = "center"
                 napisdiv.style.fontSize = "27px"
                 napisdiv.style.fontWeight = "bold"
+                napisdiv.style.marginTop = "15px"
+                napisdiv.style.marginBottom = "10px"
                 owerlaywyświetlanie.appendChild(napisdiv)
                 zdjecie.rankingiplansz()
             },
             rankingiplansz: function () {
+                let contener = document.getElementById("overlay2")
+                let przyciski = document.createElement("div")
+                przyciski.style.display = "flex"
+                przyciski.style.flexDirection = "row"
+                przyciski.style.justifyContent = "center"
+                for (let i = 0; i < button.length; i++) {
+                    let clicki = document.createElement("button")
+                    clicki.innerHTML = button[i] + " x " + button[i]
+                    clicki.classList = "button"
+                    clicki.style.margin = "5px"
+                    clicki.style.width = "70px"
+                    clicki.style.height = "36px"
+                    clicki.style.backgroundColor = "black"
+                    clicki.style.border = "3px solid white"
+                    clicki.style.borderRadius = "8px"
+                    clicki.style.color = "white"
+                    clicki.style.fontSize = "20px"
+                    clicki.addEventListener("click", function () {
+                        if (document.getElementById("rek") != null) {
+                            let placki = document.getElementById("rek").remove()
+                        }
+
+                        let divdiv = document.createElement("div")
+                        divdiv.id = "rek"
+                        divdiv.style.marginBottom = "15px"
+                        divdiv.style.display = "flex"
+                        divdiv.style.justifyContent = "center"
+                        divdiv.style.alignItems = "center"
+                        if (document.cookie != "") {
+                            for (let c = 0; c < document.cookie.split("; ").length; c++) {
+                                let plansza = document.cookie.split("; ")[c].split("=")[0].split("|")[0]
+                                let miejsce = document.cookie.split("; ")[c].split("=")[0].split("|")[1]
+                                let nick = document.cookie.split("; ")[c].split("=")[1].split("|")[0]
+                                let czas = document.cookie.split("; ")[c].split("=")[1].split("|")[1]
+                                if (button[i] - 3 == (plansza)) {
+                                    let napisanydiv = document.createElement("div")
+                                    napisanydiv.innerHTML = decodeURIComponent(nick) + " - " + czas
+                                    napisanydiv.style.display = "flex"
+                                    napisanydiv.style.fontSize = "25px"
+                                    napisanydiv.style.marginTop = "10px"
+                                    divdiv.appendChild(napisanydiv)
+                                }
+                            }
+                        } contener.appendChild(divdiv)
+                    })
+                    przyciski.appendChild(clicki)
+                }
+                contener.appendChild(przyciski)
+                let wyjsciediv = document.createElement("div")
+                wyjsciediv.style.display = "flex"
+                wyjsciediv.style.alignItems = "center"
+                let wyjscie = document.createElement("button")
+                wyjscie.innerHTML = "OK"
+                wyjscie.classList = "button"
+                wyjscie.style.margin = "5px"
+                wyjscie.style.width = "70px"
+                wyjscie.style.height = "40px"
+                wyjscie.style.backgroundColor = "black"
+                wyjscie.style.border = "3px solid white"
+                wyjscie.style.borderRadius = "8px"
+                wyjscie.style.color = "white"
+                wyjscie.style.fontSize = "20px"
+                wyjscie.addEventListener("click", function () {
+                    let usuwaniecie = document.getElementById("owerlay")
+                    let usuwanieciedwa = document.getElementById("overlay2")
+                    usuwaniecie.remove()
+                    usuwanieciedwa.remove()
+                })
+                wyjsciediv.appendChild(wyjscie)
+                contener.appendChild(wyjsciediv)
 
             }
         }
