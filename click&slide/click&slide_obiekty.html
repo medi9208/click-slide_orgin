@@ -33,7 +33,10 @@
         #slider {
             display: flex;
             align-items: center;
+            flex-direction: row;
+            justify-content: center;
             margin-bottom: 10px;
+            width: 100%;
         }
 
         #main {
@@ -92,6 +95,10 @@
 
         }
 
+        .arrow:hover {
+            filter: invert(1)
+        }
+
         .button {
             cursor: pointer;
         }
@@ -101,7 +108,7 @@
 
 <body>
     <div id="content">
-        <div id="slider"><img src="pictures/picture01.png" height="150px" width="150px"></div>
+        <div id="slider"></div>
         <div id="buttons"></div>
         <div id="czas"></div>
         <div id="main">
@@ -138,7 +145,92 @@
             let addbutton = document.querySelector("#buttons")
             addbutton.appendChild(button)
         }
+        let slider = {
+            picturenumber: 1,
+            zmianapicture: function () {
+                let contener = document.getElementById("slider")
+                let leftdiv = document.createElement("div")
+                let left = document.createElement("img")
+                left.src = "pictures/left.png"
+                left.classList = "arrow"
+                left.style.height = "80px"
+                left.style.width = "80px"
+                left.addEventListener("click", function () {
+                    let raz = 0
+                    let przes = setInterval(function () {
+                        let przeusuwany = document.getElementById("przesuwany")
+                        if (slider.picturenumber == 1) {
+                            przesuwany.scrollLeft = 600
+                            slider.picturenumber = 4
+                        }
+                        przesuwany.scrollLeft -= 5
+                        raz += 1
+                        if (raz == 40) {
+                            clearInterval(przes)
+                            slider.picturenumber -= 1
+                        }
+                    }, 1)
+                })
+                leftdiv.appendChild(left)
+                contener.appendChild(leftdiv)
+                let divadd = document.createElement("div")
 
+                let placek = document.createElement("div")
+                for (let i = 1; i < 5; i++) {
+                    let images = document.createElement("img")
+                    if (i == 4) {
+                        images.src = "pictures/picture01.png"
+                    } else {
+                        images.src = "pictures/picture0" + i + ".png"
+                    }
+                    images.style.height = "200px"
+                    images.style.width = "200px"
+                    placek.appendChild(images)
+
+                }
+                placek.scrollLeft = "600px"
+                placek.id = "przesuwany"
+                placek.style.height = "200px"
+                placek.style.overflow = "hidden"
+                placek.style.display = "flex"
+                placek.style.flexDirection = "row"
+                divadd.appendChild(placek)
+                divadd.style.height = "200px"
+                divadd.style.width = "200px"
+                contener.appendChild(divadd)
+                let rightdiv = document.createElement("div")
+                let righ = document.createElement("img")
+                righ.src = "pictures/right.png"
+                righ.classList = "arrow"
+                righ.style.height = "80px"
+                righ.style.width = "80px"
+                righ.addEventListener("click", function () {
+                    let raz = 0
+                    let przes = setInterval(function () {
+                        let przeusuwany = document.getElementById("przesuwany")
+                        if (slider.picturenumber == 4) {
+                            przesuwany.scrollLeft = -600
+                            slider.picturenumber = 1
+                        }
+                        przesuwany.scrollLeft += 5
+                        raz += 1
+
+                        if (raz == 40) {
+                            clearInterval(przes)
+                            slider.picturenumber += 1
+                            console.log(slider.picturenumber)
+                        }
+                    }, 1)
+                })
+                rightdiv.appendChild(righ)
+                contener.appendChild(rightdiv)
+
+
+
+
+            }
+        }
+        slider.zmianapicture()
         let przesunecietop = 0
         let przesunecieleft = 0
         let czaszaczecia = 0
@@ -169,11 +261,16 @@
                         kawalek.style.width = (zdjecie.widhei / a) + "px"
                         kawalek.style.height = (zdjecie.widhei / a) + "px"
                         kawalek.style.position = "absolute"
+                        kawalek.style.zIndex = "1"
                         if (x == a - 1 && y == a - 1) {
                             kawalek.style.backgroundColor = "black"
 
                         } else {
-                            kawalek.style.backgroundImage = "url(" + zdjecie.src + ")"
+                            if (slider.picturenumber == 4) {
+                                kawalek.style.backgroundImage = "url(pictures/picture01.png)"
+                            } else {
+                                kawalek.style.backgroundImage = "url(pictures/picture0" + slider.picturenumber + ".png)"
+                            }
                             kawalek.style.backgroundSize = zdjecie.widhei + "px"
                             kawalek.style.backgroundPosition = -y * (zdjecie.widhei / a) + "px " + -x * (zdjecie.widhei / a) + "px"
                         }
@@ -188,6 +285,7 @@
                             let aktualnyxy = this.className.split("x")
                             let przejsciowexy = ""
                             let czarny = document.getElementById("x" + (a - 1) + " y" + (a - 1))
+                            czarny.style.zIndex = "0"
                             let czarnyxy = czarny.className.split("x")
                             if (aktualnyxy[0] == (czarnyxy[0] - 1) && aktualnyxy[1] == czarnyxy[1] || aktualnyxy[0] - 1 == (czarnyxy[0]) && aktualnyxy[1] == czarnyxy[1] || aktualnyxy[0] == czarnyxy[0] && aktualnyxy[1] - 1 == (czarnyxy[1]) || aktualnyxy[0] == czarnyxy[0] && aktualnyxy[1] == (czarnyxy[1] - 1)) {
                                 przejsciowexy = czarnyxy
