@@ -118,33 +118,40 @@
     </div>
 
     <script>
-        var button = [3, 4, 5, 6]
-        for (let a = button[0]; a < button[0] + button.length; a++) {
-            let button = document.createElement("button")
-            button.classList = "button"
-            button.style.margin = "5px"
-            button.style.width = "70px"
-            button.style.height = "36px"
-            button.style.backgroundColor = "black"
-            button.style.border = "3px solid white"
-            button.style.borderRadius = "8px"
-            button.style.color = "white"
-            button.style.fontSize = "20px"
-            button.addEventListener("click", function () {
-                clearInterval(zmienianko)
-                zdjecie.licznik()
-                var usuwanie = document.getElementById("picture")
-                usuwanie.innerHTML = ""
-                var ramka = document.getElementById("picture")
-                ramka.style.border = "1px solid red"
-                zdjecie.rozcinanie(a)
+        let buttony = {
+            button: [3, 4, 5, 6],
+            create: function () {
+                for (let a = buttony.button[0]; a < buttony.button[0] + buttony.button.length; a++) {
+                    let button = document.createElement("button")
+                    button.classList = "button"
+                    button.style.margin = "5px"
+                    button.style.width = "70px"
+                    button.style.height = "36px"
+                    button.style.backgroundColor = "black"
+                    button.style.border = "3px solid white"
+                    button.style.borderRadius = "8px"
+                    button.style.color = "white"
+                    button.style.fontSize = "20px"
+                    button.addEventListener("click", function () {
+                        clearInterval(zmienianko)
+                        zdjecie.licznik()
+                        var usuwanie = document.getElementById("picture")
+                        usuwanie.innerHTML = ""
+                        var ramka = document.getElementById("picture")
+                        ramka.style.border = "1px solid red"
+                        zdjecie.rozcinanie(a)
 
 
-            })
-            button.innerText = a + " x " + a
-            let addbutton = document.querySelector("#buttons")
-            addbutton.appendChild(button)
+                    })
+                    button.innerText = a + " x " + a
+                    let addbutton = document.querySelector("#buttons")
+                    addbutton.appendChild(button)
+                }
+            }
         }
+        buttony.create()
+        // var button = [4,5]
+
         let slider = {
             picturenumber: 1,
             zmianapicture: function () {
@@ -218,7 +225,6 @@
                         if (raz == 40) {
                             clearInterval(przes)
                             slider.picturenumber += 1
-                            console.log(slider.picturenumber)
                         }
                     }, 1)
                 })
@@ -242,7 +248,7 @@
             actualindex: 0,
             czasczas: 0,
             widhei: 400,
-            a: (button.lenght - 1),
+            a: (buttony.button.lenght - 1),
             src: "pictures/picture01.png",
 
             mieszanie: function (a) {
@@ -347,7 +353,6 @@
                                                 zdjecie.actualindex = indexplanszy
                                                 zdjecie.czasczas = zerohour + ":" + zeromin + ":" + zerosec + "." + XD + zeroreszta
                                                 document.cookie = indexplanszy + "|10" + "=" + "mynick" + "|" + zerohour + ":" + zeromin + ":" + zerosec + "." + XD + zeroreszta + "|" + rekord
-                                                console.log("pierwsze" + document.cookie)
                                                 zdjecie.owerlej()
                                             }, 50)
                                         }
@@ -422,7 +427,6 @@
                 przycisk.classList = "button"
                 przycisk.addEventListener("click", function () {
                     document.cookie = zdjecie.actualindex + "|10" + "=" + inputnick.value + "|" + zdjecie.czasczas + "|" + zdjecie.actualrecord
-                    console.log("drugie" + document.cookie)
                     zdjecie.wusuwaniepierwszego()
                 })
                 let przyciskdivvvvv = document.getElementById("przycisk")
@@ -449,7 +453,7 @@
             wyniki: [],
             tabliceplansz: function () {
                 zdjecie.wyniki = []
-                for (let c = 0; c < button.length; c++) {
+                for (let c = 0; c < buttony.button.length; c++) {
                     zdjecie.wyniki.push([])
                 }
                 zdjecie.cookies()
@@ -468,7 +472,7 @@
                 zdjecie.sortwyniki()
             },
             sortwyniki: function () {
-                for (let c = 0; c < button.length; c++) {
+                for (let c = 0; c < buttony.button.length; c++) {
                     document.cookie = c + "|10" + "=; max-age=-1;"
                     zdjecie.wyniki[c].sort(function (a, b) {
                         return parseFloat(a.czasmilisec) - parseFloat(b.czasmilisec);
@@ -476,7 +480,7 @@
                 } zdjecie.wyrzucaniewyniki()
             },
             wyrzucaniewyniki: function () {
-                for (let c = 0; c < button.length; c++) {
+                for (let c = 0; c < buttony.button.length; c++) {
                     if (zdjecie.wyniki[c].length > 10) {
                         zdjecie.wyniki[c].pop()
                     }
@@ -567,7 +571,7 @@
 
 
                     }
-                    if (i == a ** 1) {
+                    if (i == a ** 3) {
                         clearInterval(kuc)
                         zdjecie.odliczanie()
                         zmienianko = setInterval(zdjecie.tapodspodem, 1)
@@ -715,9 +719,9 @@
                 przyciski.style.display = "flex"
                 przyciski.style.flexDirection = "row"
                 przyciski.style.justifyContent = "center"
-                for (let i = 0; i < button.length; i++) {
+                for (let i = 0; i < buttony.button.length; i++) {
                     let clicki = document.createElement("button")
-                    clicki.innerHTML = button[i] + " x " + button[i]
+                    clicki.innerHTML = buttony.button[i] + " x " + buttony.button[i]
                     clicki.classList = "button"
                     clicki.style.margin = "5px"
                     clicki.style.width = "70px"
@@ -744,7 +748,7 @@
                                 let miejsce = document.cookie.split("; ")[c].split("=")[0].split("|")[1]
                                 let nick = document.cookie.split("; ")[c].split("=")[1].split("|")[0]
                                 let czas = document.cookie.split("; ")[c].split("=")[1].split("|")[1]
-                                if (button[i] - 3 == (plansza)) {
+                                if (buttony.button[i] - 3 == (plansza)) {
                                     let napisanydiv = document.createElement("div")
                                     napisanydiv.innerHTML = decodeURIComponent(nick) + " - " + czas
                                     napisanydiv.style.display = "flex"
